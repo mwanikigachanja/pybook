@@ -26,6 +26,17 @@ def main():
         # Daily view
         st.subheader("Daily Sales")
         # Add code to display daily sales data
+         # Table displaying daily sales data
+        daily_sales_table = filtered_df.set_index('DATE')[['BRANCH', 'CROP', 'TOTALS']].sort_index(ascending=True)
+        st.write(daily_sales_table)
+
+        # Visualization
+        st.subheader("Visualization - Daily Sales")
+        # Line chart showing daily sales data
+        fig = px.line(daily_sales_table, x=daily_sales_table.index, y='TOTALS', color='BRANCH', title='Daily Sales Over Time')
+        fig.update_layout(xaxis_title='Date', yaxis_title='Sales', legend_title='Branch')
+        st.plotly_chart(fig)
+
 
         # Weekly view
         st.subheader("Weekly Sales")
