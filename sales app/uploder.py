@@ -15,5 +15,56 @@ def main():
         st.write("Uploaded Data:")
         st.write(df)
 
+# Sidebar filters
+        branch_filter = st.sidebar.multiselect("Select Branch", df['BRANCH'].unique())
+        crop_filter = st.sidebar.multiselect("Select Crop", df['CROP'].unique())
+
+        # Filter data based on user selections
+        filtered_df = df[df['BRANCH'].isin(branch_filter) & df['CROP'].isin(crop_filter)]
+
+        # Dashboard components
+        # Daily view
+        st.subheader("Daily Sales")
+        # Add code to display daily sales data
+
+        # Weekly view
+        st.subheader("Weekly Sales")
+        # Add code to display weekly sales data
+
+        # Monthly view
+        st.subheader("Monthly Sales")
+        # Add code to display monthly sales data
+
+        # Quarterly view
+        st.subheader("Quarterly Sales")
+        # Add code to display quarterly sales data
+
+        # Annual view
+        st.subheader("Annual Sales")
+        # Add code to display annual sales data
+
+        # Visualization
+        st.subheader("Visualization")
+        # Example: Line chart showing total sales over time
+        fig = px.line(filtered_df, x='MONTH', y='TOTALS', color='BRANCH', title='Total Sales Over Time')
+        st.plotly_chart(fig)
+
+        # Aggregate Metrics
+        st.subheader("Aggregate Metrics")
+        # Example: Calculate total sales by branch and display as a table
+        total_sales_by_branch = filtered_df.groupby('BRANCH')['TOTALS'].sum().reset_index()
+        st.write(total_sales_by_branch)
+
+        # Export Functionality
+        st.subheader("Export Data")
+        export_format = st.selectbox("Select export format", ["CSV", "Excel"])
+        if st.button("Export Data"):
+            if export_format == "CSV":
+                csv_data = filtered_df.to_csv(index=False)
+                st.download_button(label="Download CSV", data=csv_data, file_name="filtered_data.csv", mime="text/csv")
+            elif export_format == "Excel":
+                excel_data = filtered_df.to_excel(index=False)
+                st.download_button(label="Download Excel", data=excel_data, file_name="filtered_data.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+
 if __name__ == "__main__":
     main()
