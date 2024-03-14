@@ -54,7 +54,14 @@ def main():
 
         # Monthly view
         st.subheader("Monthly Sales")
-        # Add code to display monthly sales data
+        monthly_sales_table = calculate_and_display_sales(filtered_df, 'MONTHLY')
+        st.write(monthly_sales_table)
+
+        # Visualization
+        st.subheader("Monthly Sales Visualization")
+        # Example: Line chart showing monthly sales trend
+        fig = px.line(monthly_sales_table, x='Month', y='Total Sales', title='Monthly Sales Trend')
+        st.plotly_chart(fig)
 
         # Quarterly view
         st.subheader("Quarterly Sales")
@@ -94,5 +101,11 @@ def calculate_and_display_sales(df, timeframe):
         weekly_sales.rename(columns={'TOTALS': 'Total Sales'}, inplace=True)
         return weekly_sales
 
+def calculate_and_display_sales(df, timeframe):
+    if timeframe == 'MONTHLY':
+        # Example: Calculate monthly sales and display in a table
+        monthly_sales = df.groupby(df['DATE'].dt.strftime('%B %Y')).sum()['TOTALS'].reset_index()
+        monthly_sales.rename(columns={'TOTALS': 'Total Sales', 'DATE': 'Month'}, inplace=True)
+        return monthly_sales
 if __name__ == "__main__":
     main()
