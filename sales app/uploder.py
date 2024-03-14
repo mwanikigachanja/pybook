@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import plotly.express as px
 
 def main():
     st.title("KSC Marketing - Sales Data Dashboard")
@@ -41,6 +42,15 @@ def main():
         # Weekly view
         st.subheader("Weekly Sales")
         # Add code to display weekly sales data
+        weekly_sales_table = calculate_and_display_sales(filtered_df, 'WEEKLY')
+        st.write(weekly_sales_table)
+
+        # Visualization
+        st.subheader("Weekly Sales Visualization")
+        # Example: Line chart showing weekly sales trend
+        fig = px.line(weekly_sales_table, x='Week', y='Total Sales', title='Weekly Sales Trend')
+        st.plotly_chart(fig)
+
 
         # Monthly view
         st.subheader("Monthly Sales")
@@ -76,6 +86,13 @@ def main():
             elif export_format == "Excel":
                 excel_data = filtered_df.to_excel(index=False)
                 st.download_button(label="Download Excel", data=excel_data, file_name="filtered_data.xlsx", mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+def calculate_and_display_sales(df, timeframe):
+    if timeframe == 'WEEKLY':
+        # Example: Calculate weekly sales and display in a table
+        df['Week'] = df['DATE'].dt.strftime('%U-%Y')
+        weekly_sales = df.groupby('Week').sum()['TOTALS'].reset_index()
+        weekly_sales.rename(columns={'TOTALS': 'Total Sales'}, inplace=True)
+        return weekly_sales
 
 if __name__ == "__main__":
     main()
