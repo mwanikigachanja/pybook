@@ -133,6 +133,12 @@ def calculate_and_display_sales(df, timeframe):
         quarterly_sales.rename(columns={'TOTALS': 'Total Sales', 'DATE': 'Quarter'}, inplace=True)
         return quarterly_sales
     
+def calculate_and_display_sales(df, timeframe):
+    if timeframe == 'ANNUAL':
+        # Example: Calculate annual sales and display in a table
+        annual_sales = df.groupby(df['DATE'].dt.year).sum()['TOTALS'].reset_index()
+        annual_sales.rename(columns={'TOTALS': 'Total Sales', 'DATE': 'Year'}, inplace=True)
+        return annual_sales
 
 if __name__ == "__main__":
     main()
