@@ -65,11 +65,28 @@ def main():
 
         # Quarterly view
         st.subheader("Quarterly Sales")
-        # Add code to display quarterly sales data
+        st.subheader("Quarterly Sales")
+        quarterly_sales_table = calculate_and_display_sales(filtered_df, 'QUARTERLY')
+        st.write(quarterly_sales_table)
+
+        # Visualization
+        st.subheader("Quarterly Sales Visualization")
+        # Example: Line chart showing quarterly sales trend
+        fig = px.line(quarterly_sales_table, x='Quarter', y='Total Sales', title='Quarterly Sales Trend')
+        st.plotly_chart(fig)
+
 
         # Annual view
         st.subheader("Annual Sales")
-        # Add code to display annual sales data
+        st.subheader("Annual Sales")
+        annual_sales_table = calculate_and_display_sales(filtered_df, 'ANNUAL')
+        st.write(annual_sales_table)
+
+        # Visualization
+        st.subheader("Annual Sales Visualization")
+        # Example: Line chart showing annual sales trend
+        fig = px.line(annual_sales_table, x='Year', y='Total Sales', title='Annual Sales Trend')
+        st.plotly_chart(fig)
 
         # Visualization
         st.subheader("Visualization")
@@ -107,5 +124,15 @@ def calculate_and_display_sales(df, timeframe):
         monthly_sales = df.groupby(df['DATE'].dt.strftime('%B %Y')).sum()['TOTALS'].reset_index()
         monthly_sales.rename(columns={'TOTALS': 'Total Sales', 'DATE': 'Month'}, inplace=True)
         return monthly_sales
+
+def calculate_and_display_sales(df, timeframe):
+    if timeframe == 'QUARTERLY':
+        # Example: Calculate quarterly sales and display in a table
+        quarters = df['DATE'].dt.to_period('Q')
+        quarterly_sales = df.groupby(quarters).sum()['TOTALS'].reset_index()
+        quarterly_sales.rename(columns={'TOTALS': 'Total Sales', 'DATE': 'Quarter'}, inplace=True)
+        return quarterly_sales
+    
+
 if __name__ == "__main__":
     main()
