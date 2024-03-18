@@ -2,6 +2,8 @@
 
 # Sales Data Dashboard
 
+Blueprint
+
 The Sales Data Dashboard is a Streamlit web application that allows users to upload Excel files containing sales data and visualize it in various time frames (daily, weekly, monthly, quarterly, and annual). The dashboard provides interactive visualizations, filtering options, aggregate metrics, and export functionality.
 
 ## Features
